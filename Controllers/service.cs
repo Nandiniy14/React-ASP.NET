@@ -23,7 +23,7 @@ namespace EmployeeApp.Controllers
             {
                 var greeting = session.WriteTransaction(tx =>
                 {
-                    var result = tx.Run("CREATE (a:Employee{empid:$e.id,name:$e.name,phone:$e.phone,designation:$e.designation}) " +
+                    var result = tx.Run("CREATE (a:Employee{empid:$e.empid,name:$e.name,phone:$e.phone,designation:$e.designation}) " +
                                         "RETURN a.empid + ', from node '",
                         new {e});
                     return result.Single()[0].As<string>();
@@ -50,6 +50,31 @@ namespace EmployeeApp.Controllers
                 return greeting;
             }
 
+        }
+
+        public void DeleteEmployee(EmployeeID empid)
+        {
+            using (var session = _driver.Session())
+            {
+                var res = session.WriteTransaction(tx =>
+                {
+                    var result = tx.Run("WITH $empid.empid AS ids MATCH(n:Employee) WHERE n.empid IN ids  DELETE n",new { empid});
+                    return result;
+                });
+            }
+        }
+
+        public void UpdateEmployee(EmployeeModel e)
+        {
+            using (var session = _driver.Session())
+            {
+                var greeting = session.WriteTransaction(tx =>
+                {
+                    var result = tx.Run("Match (a:Employee{empid:$e.empid}) SET a.name=$e.name, a.phone=$e.phone,a.designation=$e.designation return a ",
+                        new { e });
+                    return result.Single()[0].As<string>();
+                });
+            }
         }
 
         public void Dispose()

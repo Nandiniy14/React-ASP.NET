@@ -7,20 +7,20 @@ export class EmployeeForm extends Component {
 
     constructor() {
         super();
-        this.state = { id: '', name: '', phone: '', designation: '' };
+        this.state = { empid: '', name: '', phone: '', designation: '' };
     }
 
     handleSubmit(event) {
        
         event.preventDefault();
-        fetch('api/Employee', {
+        fetch('odata/Employees', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id: this.state.id,
+                empid: this.state.empid,
                 name: this.state.name,
                 phone: this.state.phone,
                 designation:this.state.designation
@@ -30,7 +30,7 @@ export class EmployeeForm extends Component {
             .then((responseObj) => {
                 alert("Registered Succesfully");
                 this.setState({
-                    id: '',
+                    empid: '',
                     name: '',
                     phone: '',
                     designation: ''
@@ -42,7 +42,7 @@ export class EmployeeForm extends Component {
 
     render() {
         return (
-            <div class="container">
+            <div className="container">
 
                 <h3>
                     Add Employee
@@ -50,14 +50,14 @@ export class EmployeeForm extends Component {
                 <br />
                 <form onSubmit={(event) => this.handleSubmit(event)}>
                     <FormGroup
-                        controlId="id"
+                        controlId="empid"
                     >
                         <ControlLabel>Employee ID</ControlLabel>
                         <FormControl
                             type="number"
-                            value={this.state.id}
+                            value={this.state.empid}
                             placeholder="Enter ID"
-                            onChange={(event) => this.setState({ id: event.target.value })}
+                            onChange={(event) => this.setState({ empid: event.target.value })}
                         />
                         <FormControl.Feedback />
                         <br />
